@@ -1,3 +1,8 @@
+
+import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
+import { AuthInterceptorProvider } from './_services/auth.interceptor';
+
 import { appRoutes } from './routes';
 import { AuthService } from './_services/auth.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -7,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { AppComponent } from './app.component';
 import { ValueComponent } from './value/value.component';
@@ -15,10 +21,16 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { AlertifyService } from './_services/alertify.service';
-import { MemberListComponent } from './member-list/member-list.component';
+import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListComponent } from './list/list.component';
 import { MessagesComponent } from './messages/messages.component';
+import { MemberCardComponent } from './members/member-card/member-card.component';
+import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 
+
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -29,7 +41,9 @@ import { MessagesComponent } from './messages/messages.component';
     RegisterComponent,
     MemberListComponent,
     ListComponent,
-    MessagesComponent
+    MessagesComponent,
+    MemberCardComponent,
+    MemberDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -37,13 +51,17 @@ import { MessagesComponent } from './messages/messages.component';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
     RouterModule.forRoot(appRoutes),
-    BsDropdownModule.forRoot()
   ],
   providers: [
     AuthService,
     AlertifyService,
-    ErrorInterceptorProvider
+    ErrorInterceptorProvider,
+    AuthInterceptorProvider,
+    MemberDetailResolver,
+    MemberListResolver
   ],
   bootstrap: [
     AppComponent
