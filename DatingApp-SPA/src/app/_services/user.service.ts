@@ -1,3 +1,4 @@
+import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
 
@@ -17,7 +18,7 @@ const httpOptions = {
 export class UserService {
   baseUrl = environment.apiUrl + 'user';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   getUsers() {
     return this.http.get<User[]>(this.baseUrl);
@@ -25,6 +26,11 @@ export class UserService {
 
   getUser(id) {
     return this.http.get<User>(this.baseUrl + '/' + id);
+  }
+
+  updateUser(user: User) {
+    debugger;
+    return this.http.put(this.baseUrl + '/' + this.authService.decodedToken.nameid, user);
   }
 
 }
