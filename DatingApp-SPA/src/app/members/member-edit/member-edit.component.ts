@@ -1,3 +1,4 @@
+import { AuthService } from './../../_services/auth.service';
 import { UserService } from './../../_services/user.service';
 import { AlertifyService } from './../../_services/alertify.service';
 import { User } from './../../_models/user';
@@ -23,7 +24,7 @@ export class MemberEditComponent implements OnInit {
     }
   }
 
-  constructor(private route: ActivatedRoute, private alertify: AlertifyService, private userService: UserService) { }
+  constructor(private route: ActivatedRoute, private alertify: AlertifyService, private userService: UserService, public authService: AuthService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

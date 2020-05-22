@@ -1,29 +1,161 @@
-<form #registerForm="ngForm" (ngSubmit)="register()">
+<form [formGroup]="registerForm" (ngSubmit)="register()">
   <h2 class="text-center text-primary">Sign Up</h2>
 
   <hr />
   <div class="form-group">
+    <label class="control-label" style="margin-right: 10px;">I am a: </label>
+    <label class="radio-inline">
+      <input
+        class="mr-3"
+        type="radio"
+        value="male"
+        formControlName="gender"
+      />Male
+    </label>
+    <label class="radio-inline ml-3">
+      <input
+        class="mr-3"
+        type="radio"
+        value="female"
+        formControlName="gender"
+      />Female
+    </label>
+  </div>
+
+  <div class="form-group">
     <input
       type="text"
       class="form-control"
+      [ngClass]="{ 'is-invalid': f.username.invalid && f.username.touched }"
       placeholder="Username"
       name="username"
       id="username"
-      [(ngModel)]="model.username"
-      required
+      formControlName="username"
     />
+    <div
+      class="invalid-feedback"
+      *ngIf="f.username.invalid && f.username.touched"
+    >
+      <div *ngIf="f.username.errors.required">Please choose username</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input
+      class="form-control"
+      [ngClass]="{ 'is-invalid': f.knownAs.invalid && f.knownAs.touched }"
+      placeholder="Known as"
+      formControlName="knownAs"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="f.knownAs.invalid && f.knownAs.touched"
+    >
+      <div *ngIf="f.knownAs.errors.required">Please choose username</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input
+      class="form-control"
+      [ngClass]="{
+        'is-invalid': f.dateOfBirth.invalid && f.dateOfBirth.touched
+      }"
+      placeholder="Date of Birth"
+      formControlName="dateOfBirth"
+      bsDatepicker
+      [bsConfig]="bsConfig"
+      [maxDate]="maxDate"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="f.dateOfBirth.invalid && f.dateOfBirth.touched"
+    >
+      <div *ngIf="f.dateOfBirth.errors.required">Please select birth date</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input
+      class="form-control"
+      [ngClass]="{ 'is-invalid': f.city.invalid && f.city.touched }"
+      placeholder="City"
+      formControlName="city"
+    />
+    <div class="invalid-feedback" *ngIf="f.city.invalid && f.city.touched">
+      <div *ngIf="f.city.errors.required">City field is required</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input
+      class="form-control"
+      [ngClass]="{ 'is-invalid': f.country.invalid && f.country.touched }"
+      placeholder="Country"
+      formControlName="country"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="f.country.invalid && f.country.touched"
+    >
+      <div *ngIf="f.country.errors.required">Country field is required</div>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <input
+      type="password"
+      class="form-control"
+      [ngClass]="{ 'is-invalid': f.password.invalid && f.password.touched }"
+      placeholder="Password"
+      id="password"
+      name="password"
+      formControlName="password"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="f.password.invalid && f.password.touched"
+    >
+      <div *ngIf="f.password.errors.required">Password field is required</div>
+      <div *ngIf="f.password.errors.minlength">
+        Password must contain atleast
+        {{ f.password.errors.minlength.requiredLength }} characters
+      </div>
+      <div *ngIf="f.password.errors.maxlength">
+        Password must not exceed
+        {{ f.password.errors.maxlength.requiredLength }} characters
+      </div>
+    </div>
   </div>
 
   <div class="form-group">
     <input
       type="password"
       class="form-control"
-      placeholder="Password"
+      [ngClass]="{
+        'is-invalid':
+          (f.confirmPassword.invalid && f.confirmPassword.touched) ||
+          (f.confirmPassword.touched && registerForm.errors?.mismatch)
+      }"
+      placeholder="Confirm Password"
       id="password"
       name="password"
-      [(ngModel)]="model.password"
-      required
+      formControlName="confirmPassword"
     />
+
+    <div
+      class="invalid-feedback"
+      *ngIf="
+      (f.confirmPassword.invalid && f.confirmPassword.touched) ||
+      (f.confirmPassword.touched && registerForm.errors?.mismatch)
+      "
+    >
+    <div *ngIf="f.confirmPassword.errors?.required">Confirm password field is required</div>
+      <div *ngIf="registerForm.errors?.mismatch">
+        Confirm Password must match password field
+      </div>
+    </div>
   </div>
 
   <div class="form-group text-center">

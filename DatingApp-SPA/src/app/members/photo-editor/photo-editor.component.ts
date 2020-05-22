@@ -36,11 +36,9 @@ export class PhotoEditorComponent implements OnInit {
 
   myFormData: FormData;
 
-  constructor(private httpClient: HttpClient, private authService: AuthService,
-              private userService: UserService, private alertify: AlertifyService) { }
+  constructor(private httpClient: HttpClient, public authService: AuthService, private userService: UserService, private alertify: AlertifyService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   deletePhoto(photo: Photo) {
     this.alertify.confirm('Are you sure you want to delete photo?', () => {
@@ -99,7 +97,15 @@ export class PhotoEditorComponent implements OnInit {
         .subscribe(response => {
           if (response instanceof HttpResponse) {
             const photo: Photo = response.body as Photo;
+
             this.photos.push(photo);
+
+            if (photo.isMain) {
+              this.authService.changeMemberPhoto(photo.url);
+              this.authService.currentUser.photoUrl = photo.url;
+              localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
+            }
+
             this.progress = (uploadCount / this.files.length) * 100;
           }
         },

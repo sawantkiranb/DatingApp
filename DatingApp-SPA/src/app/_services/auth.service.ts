@@ -33,8 +33,9 @@ export class AuthService {
         map((response: any) => {
           const user = response;
           console.log(response.user);
-
+          debugger;
           if (user) {
+
             localStorage.setItem('token', user.token);
             localStorage.setItem('user', JSON.stringify(user.user));
 

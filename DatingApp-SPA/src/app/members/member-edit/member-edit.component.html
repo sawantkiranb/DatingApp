@@ -15,7 +15,10 @@
       <div class="card">
         <img
           class="card-img-top img-thumbnail"
-          src="{{ user.photoUrl }}"
+          src="{{
+            (authService.currentPhotoUrl | async) ||
+              '../../../../../assets/user.png'
+          }}"
           alt="{{ user.knownAs }}"
         />
         <div class="card-body">
