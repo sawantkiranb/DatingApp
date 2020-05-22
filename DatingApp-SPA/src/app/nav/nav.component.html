@@ -16,6 +16,11 @@
       </ul>
 
       <div *ngIf="loggedIn()" class="dropdown" dropdown>
+        <img
+          src="{{ authService.currentPhotoUrl | async }}"
+          alt=""
+          class="img-user-profile"
+        />
         <a
           class="dropdown-toggle"
           role="button"

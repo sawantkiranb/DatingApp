@@ -29,8 +29,15 @@ export class UserService {
   }
 
   updateUser(user: User) {
-    debugger;
     return this.http.put(this.baseUrl + '/' + this.authService.decodedToken.nameid, user);
+  }
+
+  setMainPhoto(id) {
+    return this.http.post(this.baseUrl + '/' + this.authService.decodedToken.nameid + '/photo/' + id + '/setmain', {});
+  }
+
+  deletePhoto(id) {
+    return this.http.delete(this.baseUrl + '/' + this.authService.decodedToken.nameid + '/photo/' + id);
   }
 
 }

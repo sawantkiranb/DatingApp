@@ -1,9 +1,9 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <h1>Your Profile</h1>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-9">
       <div class="alert alert-info" *ngIf="editForm.dirty">
         <strong>Information: </strong>You have made changes. Any unsaved changes
         will be lost!
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <div class="card">
         <img
           class="card-img-top img-thumbnail"
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-9">
       <div class="tab-panel">
         <tabset class="member-tabset">
           <tab heading="Edit Profile">
@@ -98,7 +98,10 @@
             </form>
           </tab>
           <tab heading="Edit Photos">
-            <p>Photo edit will go here</p>
+            <app-photo-editor
+              [photos]="user.photos"
+              (setMainPhotoChange)="setMainPhoto($event)"
+            ></app-photo-editor>
           </tab>
         </tabset>
       </div>

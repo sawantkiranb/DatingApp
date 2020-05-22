@@ -1,0 +1,152 @@
+<div class="row">
+  <div class="col-sm-2" *ngFor="let photo of photos">
+    <img class="img-thumbnail p-1" src="{{ photo.url }}" alt="" />
+    <div class="text-center">
+      <button
+        class="btn btn-sm mr-1"
+        [ngClass]="photo.isMain ? 'btn-success active' : 'btn-secondary'"
+        [disabled]="photo.isMain"
+        (click)="setMainPhoto(photo)"
+      >
+        Main
+      </button>
+      <button class="btn btn-sm btn-danger" (click)="deletePhoto(photo)">
+        <i class="fa fa-trash-o"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm">
+    <ngfFormData
+      [files]="files"
+      [(FormData)]="myFormData"
+      postName="file"
+    ></ngfFormData>
+
+    <ngfUploadStatus
+      [(percent)]="progress"
+      [httpEvent]="httpEvent"
+    ></ngfUploadStatus>
+
+    <div class="inline-block mt-5">
+      <h4>Upload Photos</h4>
+
+      <div class="inline-block">
+        <!-- <strong>Images</strong> Only -->
+        <div
+          ngfSelect
+          multiple="1"
+          accept="image/*"
+          [maxSize]="maxSize"
+          [(files)]="files"
+          class="well my-drop-zone"
+          style="
+            border-style: groove;
+            padding: 0.5em;
+            text-align: center;
+            width: 150px;
+          "
+          [(lastInvalids)]="lastInvalids"
+          (filesChange)="lastFileAt = getDate()"
+        >
+          <span class="fa fa-upload fa-2x"></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 40px;">
+      <h4>{{ files.length }} Queued Files</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of files; let i = index">
+            <td>
+              <div
+                *ngIf="
+                  ['image/gif', 'image/png', 'image/jpeg'].indexOf(item.type) >=
+                  0
+                "
+              >
+                <div class="previewIcon" [ngfBackground]="item"></div>
+              </div>
+              <strong>{{ item.name }}</strong>
+            </td>
+            <td nowrap>
+              {{ item.type }}
+            </td>
+            <td nowrap>{{ item.size / 1024 / 1024 | number: ".2" }} MB</td>
+            <td nowrap>
+              <button
+                type="button"
+                class="btn btn-danger btn-xs"
+                (click)="files.splice(i, 1)"
+              >
+                <span class="fa fa-trash-o"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div>
+        <div>
+          Queue progress:
+          <div class="progress">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              [ngStyle]="{ width: progress + '%' }"
+            ></div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="lastFileAt">
+          <p>
+            <strong>Last file(s) selected At:</strong>
+            {{ lastFileAt | date: "longTime" }}
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="progress == 100">
+          <i class="fa fa-pull-right"></i>
+          &nbsp;Upload Complete
+        </ng-container>
+
+        <button
+          type="button"
+          class="btn btn-success btn-sm m-1"
+          (click)="uploadFiles(files)"
+          [disabled]="!files.length"
+        >
+          <span class="fa fa-upload"></span> Upload all
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-warning btn-sm m-1"
+          (click)="cancel()"
+          [disabled]="!httpEmitter"
+        >
+          <span class="fa fa-ban"></span> Cancel all
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger btn-sm m-1"
+          (click)="files.length = 0"
+          [disabled]="!files.length"
+        >
+          <span class="fa fa-trash"></span> Remove all
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+.img-thumbnail {
+  min-height: 100px !important;
+  min-width: 100px;
+  margin: 5px 0;
+}
+
+.my-drop-zone {
+  border: dotted 3px lightgray;
+}
+/* Default class applied to drop zones on over */
+.invalid-drag {
+  border: dotted 3px red;
+}
+.valid-drag {
+  border: dotted 3px green;
+}
+html,
+body {
+  height: 100%;
+}
+.previewIcon {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.inline-block {
+  display: inline-block;
+  margin: 0.2em;
+}
