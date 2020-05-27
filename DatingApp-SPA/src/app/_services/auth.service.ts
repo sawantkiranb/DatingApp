@@ -33,7 +33,7 @@ export class AuthService {
         map((response: any) => {
           const user = response;
           console.log(response.user);
-          debugger;
+
           if (user) {
 
             localStorage.setItem('token', user.token);
@@ -59,6 +59,10 @@ export class AuthService {
 
   getToken() {
     return localStorage.getItem('token');
+  }
+
+  getUser(): User {
+    return JSON.parse(localStorage.getItem('user'));
   }
 
 }

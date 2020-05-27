@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,11 +32,31 @@ namespace DatingApp.API.Data
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<PagedList<User>> GetAll(UserParams userParams)
         {
-            var users = await _context.Users.Include(p => p.Photos).ToListAsync();
+            var users = _context.Users.Include(p => p.Photos)
+            .OrderByDescending(u => u.Created)
+            .AsQueryable();
 
-            return users;
+            users = users.Where(u => u.Id != userParams.UserId);
+            users = users.Where(u => u.Gender == userParams.Gender);
+
+            var minDate = DateTime.Now.AddYears(-userParams.maxAge);
+            var maxDate = DateTime.Now.AddYears(-userParams.minAge);
+
+            users = users.Where(u => u.DateOfBirth >= minDate && u.DateOfBirth < maxDate);
+
+            switch (userParams.OrderBy)
+            {
+                case "created":
+                    users = users.OrderByDescending(u => u.Created);
+                    break;
+                case "lastActive":
+                    users = users.OrderByDescending(u => u.LastActive);
+                    break;
+            }
+
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<Photo> GetPhotoForUser(int id)
