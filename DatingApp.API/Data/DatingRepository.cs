@@ -34,7 +34,8 @@ namespace DatingApp.API.Data
 
         public async Task<PagedList<User>> GetAll(UserParams userParams)
         {
-            var users = _context.Users.Include(p => p.Photos)
+            var users = _context.Users
+            .Include(p => p.Photos)
             .OrderByDescending(u => u.Created)
             .AsQueryable();
 
@@ -56,12 +57,40 @@ namespace DatingApp.API.Data
                     break;
             }
 
+            if (userParams.Likees)
+            {
+                var user = await _context.Users
+                .Include(u => u.Likees)
+                .Include(u => u.Likers)
+                .FirstOrDefaultAsync(u => u.Id == userParams.UserId);
+
+                var likeeList = user.Likees.Where(u => u.LikerId == userParams.UserId).Select(u => u.LikeeId);
+
+                users = users.Where(u => likeeList.Contains(u.Id));
+            }
+
+            if (userParams.Likers)
+            {
+                var user = await _context.Users
+                .Include(u => u.Likees)
+                .Include(u => u.Likers)
+                .FirstOrDefaultAsync(u => u.Id == userParams.UserId);
+
+                var likerList = user.Likers.Where(i => i.LikeeId == userParams.UserId).Select(u => u.LikerId);
+                users = users.Where(u => likerList.Contains(u.Id));
+            }
+
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<Photo> GetPhotoForUser(int id)
         {
             return await _context.Photos.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Like> GetLike(int userId, int likeeId)
+        {
+            return await _context.Likes.FirstOrDefaultAsync(x => x.LikerId == userId && x.LikeeId == likeeId);
         }
 
         public async Task<bool> SaveALL()

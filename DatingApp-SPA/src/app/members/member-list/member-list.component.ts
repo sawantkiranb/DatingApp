@@ -27,8 +27,9 @@ export class MemberListComponent implements OnInit {
     });
 
     const currentUser = this.authService.getUser();
+    console.log(currentUser);
 
-    this.userParams.gender = (currentUser.gender === 'male') ? 'female' : currentUser.gender;
+    this.userParams.gender = (currentUser.gender === 'male') ? 'female' : 'male';
     this.userParams.minAge = 18;
     this.userParams.maxAge = 99;
     this.userParams.orderBy = 'created';
