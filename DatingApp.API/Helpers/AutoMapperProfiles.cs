@@ -27,6 +27,13 @@ namespace DatingApp.API.Helpers
             CreateMap<Photo, PhotoToReturnDto>();
             CreateMap<UserForDetailsDto, User>();
             CreateMap<UserForRegisterDto, User>();
+
+            CreateMap<MessageForCreationDto, Message>();
+            CreateMap<Message, MessageForCreationDto>();
+
+            CreateMap<Message, MessageToReturnDto>()
+            .ForMember(m => m.RecipientPhotoUrl, opt => opt.MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain == true).Url))
+            .ForMember(m => m.SenderPhotoUrl, opt => opt.MapFrom(u => u.Sender.Photos.FirstOrDefault(p => p.IsMain == true).Url));
         }
     }
 }

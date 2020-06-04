@@ -1,0 +1,15 @@
+.chat-thumbnail {
+  max-height: 32px;
+}
+
+li {
+  list-style-type: none;
+}
+
+.card {
+  border: none;
+}
+.card-body {
+  overflow-y: scroll;
+  height: 400px;
+}
